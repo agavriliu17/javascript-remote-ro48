@@ -102,3 +102,10 @@ const firstPersonDeepCopy = { ...firstPerson };
 firstPersonDeepCopy.age = 60;
 console.log(firstPersonDeepCopy.age);
 console.log(firstPerson.age);
+
+// Destructuring in js
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring
+console.log("Destructuring in js");
+const { age, lastName, firstName, ...family } = secondPerson;
+console.log(secondPerson.age, age);
+console.log(family);
