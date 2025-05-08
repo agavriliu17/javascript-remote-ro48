@@ -167,3 +167,107 @@ const goldie = new Fish("goldie", 1, "golden fish");
 rex.makeSound();
 parrot.makeSound();
 goldie.makeSound();
+
+// Task 2:
+// Create a class called Vehicle
+// It should have the following properties:
+// - brand (string)
+// - model (string)
+// - year (number)
+// - running (boolean)
+// - getInfo(): returns vehicle details
+
+// Create a class called Car that extends Vehicle
+// It should have the following properties:
+// - engineStatus (boolean)
+// - start(): starts the engine
+// - stop(): stops the engine
+// - getInfo(): returns vehicle details
+
+// Create classes that extend Car (ElectricCar, SuperCar)
+// Optional: Create a class called Motorcycle that extends Vehicle
+
+class Vehicle {
+  constructor(brand, model, year, mileage) {
+    this.brand = brand;
+    this.model = model;
+    this.year = year;
+    this.mileage = mileage;
+    this.running = false;
+  }
+  getInfo() {
+    return `${this.brand} ${this.model} ${this.year} has ${this.mileage} km`;
+  }
+}
+class Car extends Vehicle {
+  constructor(brand, model, year, mileage, numberOfDoors, type, engine, fuelType) {
+    super(brand, model, year, mileage);
+    this.numberOfDoors = numberOfDoors;
+    this.type = type;
+    this.engine = engine;
+    this.fuelType = fuelType;
+  }
+  start() {
+    this.running = true;
+    console.log(this.model + " started running!");
+  }
+  stop() {
+    this.running = false;
+    console.log(this.model + " stoped running!");
+  }
+}
+class ElectricCar extends Car {
+  constructor(brand, model, year, mileage, numberOfDoors, type, engine, battery) {
+    super(brand, model, year, mileage, numberOfDoors, type, engine);
+    this.fuelType = "electric";
+    this.battery = battery;
+  }
+  start() {
+    if (this.battery > 1) {
+      console.log(this.model + " ready to run!");
+    } else {
+      console.log("Please put to charge");
+    }
+  }
+  putToCharge() {
+    this.battery = 100;
+  }
+}
+const car = new Car("Volvo", "XC90", 2022, 86000, "SUV", 5, 2500, "Diesel");
+car.start();
+const eCar = new ElectricCar("Tesla", "Model3", 2024, 45000, 3, "Sedan", "Electric", 0);
+eCar.start();
+eCar.putToCharge();
+eCar.start();
+
+// Task 3: Inheritance + Encapsulation
+// Create a user management system that demonstrates both inheritance and encapsulation.
+// The system should protect sensitive data (like passwords) and implement proper access control.
+
+// Create a class called User
+// It should have the following properties:
+// - username (string)
+// - #password (string, private) - should not be directly accessible
+// - email (string)
+// - Methods:
+//   - getInfo(): returns user details (username and email only, not password)
+//   - verifyPassword(password): returns true if password matches, false otherwise
+//   - updateEmail(newEmail): updates the user's email
+
+// Create a class called Admin that extends User
+// It should have the following properties:
+// - isAdmin (boolean, should be true)
+// - Additional methods:
+//   - getInfo(): override to include admin status
+//   - viewUserPassword(user): can view other users' passwords (admin privilege)
+//   - resetUserPassword(user, newPassword): can reset other users' passwords
+
+// Create a class called Database that has the following properties:
+// - _users (private array of User objects)
+// - Methods:
+//   - addUser(user, admin): adds a user to the database (only admins can add users)
+//   - removeUser(username, admin): removes a user (only admins can remove users)
+//   - getUser(username, admin): if regular user, returns user without password
+//                              if admin, returns complete user info including password
+//   - getAllUsers(admin): if admin, returns all users with full details
+//                        if not admin, returns limited information
