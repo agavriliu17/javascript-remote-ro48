@@ -45,3 +45,8 @@ h1 {
 .cell:hover{
      background-color: #b6b6b6;
 }
+
+.winning-cell{
+    background-color:  #d4edda;
+    border-color: #c3e6cb;
+}

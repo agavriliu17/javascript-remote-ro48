@@ -6,6 +6,10 @@ class Player {
     this.score = 0;
   }
 
+  incrementScore() {
+    this.score++;
+  }
+
   // This to be implemented by AiPlayer
   makeMove() {
     return false;
@@ -89,21 +93,21 @@ class GameBoard {
 
   hasWinner(player) {
     for (const pattern of this.winningPatterns) {
-      let patternComplete = true;
+      let isWinningPattern = true;
 
       for (const index of pattern) {
         if (this.cells[index].value !== player.symbol) {
-          patternComplete = false;
+          isWinningPattern = false;
           break;
         }
       }
 
-      if (patternComplete) {
-        return true;
+      if (isWinningPattern) {
+        return pattern.map((index) => this.cells[index]);
       }
-
-      return false;
     }
+
+    return null;
   }
 }
 
@@ -139,23 +143,35 @@ class TicTacToeGame {
 
   checkGameState() {
     if (this.board.hasWinner(this.currentPlayer)) {
-      //
+      this.handleWin();
     } else if (this.board.isFull()) {
-      //
+      this.handleDraw();
     } else {
-      console.log("switchPlayer");
       this.switchPlayer();
     }
   }
 
   switchPlayer() {
-    console.log(this.currentPlayer);
     if (this.currentPlayer === this.playerX) {
       this.currentPlayer = this.playerO;
     } else {
       this.currentPlayer = this.playerX;
     }
   }
+
+  handleWin() {
+    this.isGameActive = false;
+    this.currentPlayer.incrementScore();
+    // set message
+    const winningCells = this.board.hasWinner(this.currentPlayer);
+    if (winningCells) {
+      winningCells.forEach((cell) => {
+        cell.getElement().classList.add("winning-cell");
+      });
+    }
+  }
+
+  handleDraw() {}
 }
 
 const game = new TicTacToeGame();
