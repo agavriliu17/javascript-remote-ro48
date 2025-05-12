@@ -50,3 +50,42 @@ h1 {
     background-color:  #d4edda;
     border-color: #c3e6cb;
 }
+
+.score-board{
+    display: flex;
+    justify-content: space-around;
+    margin: 20px;
+    padding: 15px;
+    background-color: #dfe5e8;
+    border-radius: 8px;
+}
+
+.score {
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 8px 16px;
+    border-radius: 8px;
+    min-width: 120px;
+}
+
+.player-x {
+    background-color: rgba(231, 76, 60, 0.1);
+}
+
+.player-0 {
+    background-color: rgba(52, 152, 219, 0.1);
+}
+
+.player-name {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.score-value .scoreX {
+    color: #e74c3c;
+}
+
+.score-value #score0 {
+    color: #3498db;
+}

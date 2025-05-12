@@ -11,6 +11,17 @@
 <body>
     <div class="container">
         <h1>Tic Tac Toe</h1>
+        <div class="score-board">
+            <div class="score player-x">
+                <span class="player-name">Player X</span>
+                <span class="score-value scoreX">0</span>
+            </div>
+            <div class="score player-0">
+                <span class="player-name">Player 0</span>
+                <span class="score-value" id="score0">0</span>
+            </div>
+        </div>
+        <div class="status">Player X's turn</div>
         <div class="board">
             <div class="cell"></div>
             <div class="cell"></div>
@@ -21,6 +32,11 @@
             <div class="cell"></div>
             <div class="cell"></div>
             <div class="cell"></div>
+        </div>
+
+        <div class="controls">
+            <button>Restart Game</button>
+            <button>Switch to AI Mode</button>
         </div>
     </div>
     <script src="game.js"></script>
