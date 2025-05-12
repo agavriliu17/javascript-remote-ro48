@@ -4,6 +4,7 @@ class Player {
     this.color = color;
     this.symbol = symbol;
     this.score = 0;
+    this.scoreElement = null;
   }
 
   incrementScore() {
@@ -57,6 +58,13 @@ class Cell {
   isEmpty() {
     return this.value === null;
   }
+
+  clear() {
+    this.value = null;
+    this.element.textContent = "";
+    this.element.style.color = "";
+    this.element.classList.remove("winning-cell");
+  }
 }
 
 class GameBoard {
@@ -109,6 +117,10 @@ class GameBoard {
 
     return null;
   }
+
+  reset() {
+    this.cells.forEach((cell) => cell.clear());
+  }
 }
 
 // Main Game Controller
@@ -123,12 +135,23 @@ class TicTacToeGame {
     this.board.initialise();
     this.isGameActive = true;
     this.gameMode = gameMode;
+
+    // Get UI elements
+    this.statusDisplay = document.getElementsByClassName("status")[0];
+    this.restartButton = document.getElementById("restartButton");
+    this.modeButton = document.getElementById("switchMode");
+
+    this.playerX.scoreElement = document.getElementsByClassName("score-value-x")[0];
+    this.playerO.scoreElement = document.getElementsByClassName("score-value-0")[0];
   }
 
   start() {
     this.board.cells.forEach((cell) => {
       cell.getElement().addEventListener("click", () => this.handleCellClick(cell), { once: true });
     });
+
+    this.restartButton.addEventListener("click", () => this.restartGame());
+    this.modeButton.addEventListener("click", () => this.switchMode());
   }
 
   handleCellClick(cell) {
@@ -157,12 +180,16 @@ class TicTacToeGame {
     } else {
       this.currentPlayer = this.playerX;
     }
+
+    console.log(this.statusDisplay.textContent);
+    this.statusDisplay.textContent = `${this.currentPlayer.name}'s turn`;
   }
 
   handleWin() {
     this.isGameActive = false;
     this.currentPlayer.incrementScore();
-    // set message
+    this.statusDisplay.textContent = `${this.currentPlayer.name} have won!`;
+
     const winningCells = this.board.hasWinner(this.currentPlayer);
     if (winningCells) {
       winningCells.forEach((cell) => {
@@ -171,7 +198,27 @@ class TicTacToeGame {
     }
   }
 
-  handleDraw() {}
+  handleDraw() {
+    this.isGameActive = false;
+    this.statusDisplay.textContent = "Draw!";
+  }
+
+  restartGame() {
+    this.board.reset();
+    this.currentPlayer = this.playerX;
+    this.isGameActive = true;
+
+    this.statusDisplay.textContent = `${this.currentPlayer.name}'s turn`;
+
+    // Re-add event listener
+    this.board.cells.forEach((cell) => {
+      cell.getElement().addEventListener("click", () => this.handleCellClick(cell), { once: true });
+    });
+  }
+
+  switchMode() {
+    console.log("mode switched");
+  }
 }
 
 const game = new TicTacToeGame();
