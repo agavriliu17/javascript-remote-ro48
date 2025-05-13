@@ -9,6 +9,7 @@ class Player {
 
   incrementScore() {
     this.score++;
+    this.scoreElement.textContent = this.score;
   }
 
   // This to be implemented by AiPlayer
@@ -18,12 +19,20 @@ class Player {
 }
 
 class AIPlayer extends Player {
-  constructor(name, color, symbol) {
+  constructor(color, symbol) {
     super("AI", color, symbol);
   }
 
-  makeMove() {
-    // To be implemented
+  makeMove(board) {
+    const emptyCells = board.cells.filter((cell) => cell.isEmpty());
+
+    if (emptyCells.length > 0) {
+      const randomIndex = Math.floor(Math.random() * emptyCells.length);
+      const randomCell = emptyCells[randomIndex];
+
+      return board.makeMove(randomCell.index, this);
+    }
+
     return false;
   }
 }
@@ -161,6 +170,13 @@ class TicTacToeGame {
 
     if (this.board.makeMove(cell.index, this.currentPlayer)) {
       this.checkGameState();
+
+      if (this.isGameActive && this.gameMode === "pve" && this.currentPlayer === this.playerO) {
+        setTimeout(() => {
+          this.currentPlayer.makeMove(this.board);
+          this.checkGameState();
+        }, 500);
+      }
     }
   }
 
@@ -217,7 +233,18 @@ class TicTacToeGame {
   }
 
   switchMode() {
-    console.log("mode switched");
+    if (this.gameMode === "pvp") {
+      this.gameMode = "pve";
+      this.playerO = new AIPlayer("#3498db", "O");
+      this.modeButton.textContent = "Switch to Player Mode";
+    } else {
+      this.gameMode = "pvp";
+      this.playerO = new Player("Player O", "#3498db", "O");
+      this.modeButton.textContent = "Switch to AI Mode";
+    }
+
+    this.playerO.scoreElement = document.getElementsByClassName("score-value-0")[0];
+    this.restartGame();
   }
 }
 
