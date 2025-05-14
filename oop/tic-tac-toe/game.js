@@ -1,15 +1,18 @@
 class Player {
-  constructor(name, color, symbol) {
+  constructor(name, color, symbol, scoreElementId) {
     this.name = name;
     this.color = color;
     this.symbol = symbol;
-    this.score = 0;
-    this.scoreElement = null;
+    this.score = sessionStorage.getItem(name) || 0;
+    this.scoreElement = document.getElementsByClassName(scoreElementId)[0];
+
+    this.scoreElement.textContent = this.score;
   }
 
   incrementScore() {
     this.score++;
     this.scoreElement.textContent = this.score;
+    sessionStorage.setItem(this.name, this.score);
   }
 
   // This to be implemented by AiPlayer
@@ -19,8 +22,8 @@ class Player {
 }
 
 class AIPlayer extends Player {
-  constructor(color, symbol) {
-    super("AI", color, symbol);
+  constructor(color, symbol, scoreElementId) {
+    super("AI", color, symbol, scoreElementId);
   }
 
   makeMove(board) {
@@ -136,8 +139,8 @@ class GameBoard {
 class TicTacToeGame {
   constructor(gameMode = "pvp") {
     // Create players
-    this.playerX = new Player("Player X", "#e74c3c", "X");
-    this.playerO = new Player("Player O", "#3498db", "O");
+    this.playerX = new Player("Player X", "#e74c3c", "X", "score-value-x");
+    this.playerO = new Player("Player O", "#3498db", "O", "score-value-0");
     this.currentPlayer = this.playerX;
 
     this.board = new GameBoard();
@@ -149,9 +152,6 @@ class TicTacToeGame {
     this.statusDisplay = document.getElementsByClassName("status")[0];
     this.restartButton = document.getElementById("restartButton");
     this.modeButton = document.getElementById("switchMode");
-
-    this.playerX.scoreElement = document.getElementsByClassName("score-value-x")[0];
-    this.playerO.scoreElement = document.getElementsByClassName("score-value-0")[0];
   }
 
   start() {
@@ -235,15 +235,14 @@ class TicTacToeGame {
   switchMode() {
     if (this.gameMode === "pvp") {
       this.gameMode = "pve";
-      this.playerO = new AIPlayer("#3498db", "O");
+      this.playerO = new AIPlayer("#3498db", "O", "score-value-0");
       this.modeButton.textContent = "Switch to Player Mode";
     } else {
       this.gameMode = "pvp";
-      this.playerO = new Player("Player O", "#3498db", "O");
+      this.playerO = new Player("Player O", "#3498db", "O", "score-value-0");
       this.modeButton.textContent = "Switch to AI Mode";
     }
 
-    this.playerO.scoreElement = document.getElementsByClassName("score-value-0")[0];
     this.restartGame();
   }
 }
