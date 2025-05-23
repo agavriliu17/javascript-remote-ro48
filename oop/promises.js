@@ -116,3 +116,39 @@ Promise.race([promise2, promise3]).then((result) => {
 });
 
 fetchData();
+
+// Practice Exercise
+// Fetch data from PokeAPI
+// 1. Fetch a random pokemon
+// 2. Log the name of the pokemon
+// 3. Log the height of the pokemon
+// 4. Log the information about the evolutions
+
+async function fetchPokemonData() {
+  const pokemonId = Math.floor(Math.random() * 30) + 1;
+  const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonId}`);
+  const pokemon = await response.json();
+
+  console.log(`Pokemon name: ${pokemon.name}`);
+  console.log(`Pokemon height: ${pokemon.height}`);
+
+  const speciesResponse = await fetch(pokemon?.species?.url);
+  const speciesData = await speciesResponse.json();
+
+  const evolutionResponse = await fetch(speciesData?.evolution_chain?.url);
+  const evolutionData = await evolutionResponse.json();
+
+  console.log("\nEvolution chain:");
+  let currentEvolution = evolutionData.chain;
+
+  while (currentEvolution) {
+    console.log(currentEvolution.species.name);
+    if (currentEvolution.evolves_to.length > 0) {
+      currentEvolution = currentEvolution.evolves_to[0];
+    } else {
+      break;
+    }
+  }
+}
+
+fetchPokemonData();
